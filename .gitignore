@@ -1,0 +1,45 @@
+# Executables
+*.out
+*.exe
+
+# GNU
+/binutils-*
+/gcc-*
+
+# ccache
+/.cache/
+
+# Language Servers
+**/compile_commands.json
+
+# Generated build stuff
+/bin/
+/*-bld*
+/bld*
+/*-build*
+/build*
+/dbg*
+/debug*
+/tst/
+/test/
+/testing/
+/win*
+/lin*
+/install*
+/lib*
+/share*
+
+
+# Docs
+**/*.html
+
+# Backups, temporary files, etc.
+**/*.tmp*
+**/*.temp*
+**/*~
+**/#*#
+**/.#*
+**/*.backup*
+**/.swp
+**/TODO.md
+**/TODO.org

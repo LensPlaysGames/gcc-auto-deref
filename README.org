@@ -1,0 +1,107 @@
+* gcc-auto-deref
+
+This repo contains a patch of the [[https://gcc.gnu.org/][GNU Compiler Collection]] which allows
+for a pointer to a ~struct~ or ~union~ to be dereferenced using the ~.~
+operator. This effectively removes the need for explicitly
+dereferencing using the ~->~ operator.
+
+This is not a breaking change, so existing code-bases should be fine
+using this compiler instead of some other one. Actually, this change
+allows for the same code to be valid in even more contexts.
+
+** Example
+
+~test.c~ contains an example of the extended feature set of this
+patched compiler.
+
+Attempting to compile ~test.c~ with a non-patched compiler will result
+in an error detailing a pointer to a struct or union needs to be
+dereferenced using ~->~.
+
+** Build & Install
+
+As always, the GNU documentation is the best source for accurate
+information: [[https://gcc.gnu.org/install/]]
+
+OSDev wiki has a few related articles that contain great examples: \\
+[[https://wiki.osdev.org/Building_GCC]] \\
+[[https://wiki.osdev.org/GCC_Cross-Compiler]]
+
+First, get the source code of binutils, as well as =GCC 9.4.0=.
+#+begin_src shell
+  wget https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz
+  wget https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.xz
+#+end_src
+[[[https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz][binutils]]] [[[https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz][GCC]]]
+
+Extract the downloaded archives into their own folders.
+#+begin_src shell
+  tar -xf binutils-2.38.tar.xz binutils-2.38
+  tar -xf gcc-9.4.0.tar.xz gcc-9.4.0
+#+end_src
+
+Download GCC prerequisites.
+#+begin_src shell
+  cd gcc-9.4.0
+  ./contrib/download_prerequisites
+  cd ..
+#+end_src
+
+Here is where we apply the patch to GCC.
+#+begin_src shell
+  patch -p 0 -u -i gcc.patch
+#+end_src
+
+Next, create out-of-source build directories for both binutils and GCC.
+#+begin_src shell
+  mkdir binutils-build
+  mkdir gcc-build
+#+end_src
+
+Now we must specify where to install the final executables and
+libraries. I choose a subdirectory of this repository named ~install~.
+To do this, we will set the shell environment variable ~PREFIX~.
+#+begin_src shell
+  export PREFIX="/absolute/path/to/this/repository/install"
+#+end_src
+
+WARNING: If you do not specify a prefix, your system compiler may be
+replaced when installing. This breaks things, so specify a prefix!
+
+We can now configure and build binutils.
+#+begin_src shell
+  cd binutils-build
+  ../binutils-2.38/configure --prefix="$PREFIX" --disable-nls --disable-werror
+  make -j
+  make install
+  cd ..
+#+end_src
+
+- ~--prefix~ -- Set installation destination.
+- ~--disable-nls~ -- Disable native langauge support (English-only diagnostics).
+- ~--disable-werror~ -- Disable warnings treated as errors (non-fatal warnings).
+
+And with binutils built and installed, we can move on to GCC. \\
+This step takes a while; make some tea, and go touch grass =:^)=.
+#+begin_src shell
+  cd gcc-build
+  ../gcc-9.4.0/configure --prefix="$PREFIX" --enable-languages=c,c++ --disable-nls --disable-werror --disable-multilib --disable-bootstrap
+  make -j all-gcc
+  make -j all-target-libgcc
+  make install-gcc
+  make install-target-libgcc
+  cd ..
+#+end_src
+
+- ~--prefix~ -- Set installation destination.
+- ~--disable-nls~ -- Disable native langauge support (English-only diagnostics).
+- ~--disable-werror~ -- Disable warnings treated as errors (non-fatal warnings).
+
+Only if *NOT* cross-compiling:
+- ~--disable-multilib~ -- Disable multiple targets (build native compiler).
+
+Only if current compiler *version matches* patched compiler version:
+- ~--disable-bootstrap~ -- Disable building bootstrap compiler (use native compiler to save time).
+
+At this point, there should be an ~install~ directory containing ~bin~, ~lib~, etc. \\
+Use the new patched compiler to build ~test.c~ and see if it works!
