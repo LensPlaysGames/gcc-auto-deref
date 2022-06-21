@@ -23,16 +23,16 @@ dereferenced using ~->~.
 As always, the GNU documentation is the best source for accurate
 information: [[https://gcc.gnu.org/install/]]
 
-OSDev wiki has a few related articles that contain great examples: \\
-[[https://wiki.osdev.org/Building_GCC]] \\
-[[https://wiki.osdev.org/GCC_Cross-Compiler]]
+OSDev wiki has a few related articles that contain great examples.
+- [[https://wiki.osdev.org/Building_GCC]]
+- [[https://wiki.osdev.org/GCC_Cross-Compiler]]
 
 First, get the source code of binutils, as well as =GCC 9.4.0=.
 #+begin_src shell
   wget https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz
   wget https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.xz
 #+end_src
-[[[https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz][binutils]]] [[[https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz][GCC]]]
+[[[https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz][binutils]]] [[[https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.xz][GCC]]]
 
 Extract the downloaded archives into their own folders.
 #+begin_src shell
@@ -105,3 +105,10 @@ Only if current compiler *version matches* patched compiler version:
 
 At this point, there should be an ~install~ directory containing ~bin~, ~lib~, etc. \\
 Use the new patched compiler to build ~test.c~ and see if it works!
+
+** Inspiration
+
+Special thanks to =Tsoding= for the idea and implementation in ~TCC~.
+- https://github.com/tsoding/tic-tac-toe-auto-deref
+- https://www.youtube.com/watch?v=yKI-VOBBFu8
+- https://www.twitch.tv/tsoding
