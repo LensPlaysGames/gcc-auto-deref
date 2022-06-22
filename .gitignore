@@ -3,8 +3,8 @@
 *.exe
 
 # GNU
-/binutils-*
-/gcc-*
+/binutils-*/
+/gcc-*/
 
 # ccache
 /.cache/
