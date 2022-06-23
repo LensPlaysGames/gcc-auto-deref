@@ -27,22 +27,29 @@ OSDev wiki has a few related articles that contain great examples.
 - [[https://wiki.osdev.org/Building_GCC]]
 - [[https://wiki.osdev.org/GCC_Cross-Compiler]]
 
-First, get the source code of binutils, as well as =GCC 9.4.0=.
+Use Linux, or WSL. Native Windows is not able to compile GCC.
+
+First, install dependencies.
+#+begin_src shell
+  sudo apt install build-essential make texinfo
+#+end_src
+
+Get the source code of binutils, as well as a supported version of GCC.
 #+begin_src shell
   wget https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz
-  wget https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.xz
+  wget https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz
 #+end_src
-[[[https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz][binutils]]] [[[https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.xz][GCC]]]
+[[[https://ftp.gnu.org/gnu/binutils/binutils-2.38.tar.xz][binutils]]] [[[https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz][GCC]]]
 
 Extract the downloaded archives into their own folders.
 #+begin_src shell
   tar -xf binutils-2.38.tar.xz binutils-2.38
-  tar -xf gcc-9.4.0.tar.xz gcc-9.4.0
+  tar -xf gcc-11.3.0.tar.xz gcc-11.3.0
 #+end_src
 
 Download GCC prerequisites.
 #+begin_src shell
-  cd gcc-9.4.0
+  cd gcc-11.3.0
   ./contrib/download_prerequisites
   cd ..
 #+end_src
@@ -85,7 +92,7 @@ And with binutils built and installed, we can move on to GCC. \\
 This step takes a while; make some tea, and go touch grass =:^)=.
 #+begin_src shell
   cd gcc-build
-  ../gcc-9.4.0/configure --prefix="$PREFIX" --enable-languages=c,c++ --disable-nls --disable-werror --disable-multilib --disable-bootstrap
+  ../gcc-11.3.0/configure --prefix="$PREFIX" --enable-languages=c,c++ --disable-nls --disable-werror --disable-multilib --disable-bootstrap
   make -j all-gcc
   make -j all-target-libgcc
   make install-gcc

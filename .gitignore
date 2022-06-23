@@ -6,6 +6,9 @@
 /binutils-*/
 /gcc-*/
 
+# Archives
+*.tar*
+
 # ccache
 /.cache/
 
